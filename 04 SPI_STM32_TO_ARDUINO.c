@@ -66,9 +66,9 @@ static void MX_I2C1_Init(void);
 #define SPIx_GPIO_PORT              //   GPIOA
 #define SPIx_AF                     //   GPIO_AF5_SPI1
 #define SPIx_GPIO_CLK_ENABLE()       //  __HAL_RCC_GPIOA_CLK_ENABLE()
-#define SPIx_SCK_PIN              //     GPIO_PIN_5
-#define SPIx_MISO_PIN              //    GPIO_PIN_6
-#define SPIx_MOSI_PIN             //     GPIO_PIN_7
+#define SPIx_SCK_PIN              //     GPIO_PIN_5    PA5
+#define SPIx_MISO_PIN              //    GPIO_PIN_6    PA6
+#define SPIx_MOSI_PIN             //     GPIO_PIN_7    PA7
 
 
 void SPIx_Init(void)
@@ -90,8 +90,16 @@ void SPIx_Init(void)
 }
 /**
   * @brief  The application entry point.
-  * @retval int
+  * @retrieval int
   */
+
+void SPIx_Write(char *str)
+{
+  while (*str)
+  {
+    HAL_SPI_Transmit(&hspi1,(uint8_t*)str++, 1, HAL_MAX_DELAY);
+  }
+}
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -118,6 +126,9 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_I2C1_Init();
+
+  SPIx_Init();
+
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -127,7 +138,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  char *str = "Hello, world!";
+	  SPIx_Write(str);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
